@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>checklist module &mdash; pyobis 1.0.0 documentation</title>
+  <title>checklist module &mdash; pyobis 1.1.3 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
             <a href="index.html" class="icon icon-home"> pyobis
           </a>
               <div class="version">
-                1.0.0
+                1.1.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -84,16 +84,23 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>taxonid</strong> – [Fixnum] A obis occurrence identifier</p></li>
-<li><p><strong>scientificname</strong> – [String,Array] One or more scientific names from the OBIS backbone. All included and
-synonym taxa are included in the search.</p></li>
-<li><p><strong>geometry</strong> – [String] Well Known Text (WKT). A WKT shape written as either POINT, LINESTRING, LINEARRING
-or POLYGON. Example of a polygon: ((30.1 10.1, 20, 20 40, 40 40, 30.1 10.1)) would be queried as <a class="reference external" href="http://bit.ly/1BzNwDq">http://bit.ly/1BzNwDq</a></p></li>
+<li><p><strong>scientificname</strong> – [String,Array] One or more scientific names from
+the OBIS backbone. All included and synonym taxa are included in
+the search.</p></li>
+<li><p><strong>geometry</strong> – [String] Well Known Text (WKT). A WKT shape written as
+either POINT, LINESTRING, LINEARRING
+or POLYGON.
+Example of a polygon: ((30.1 10.1, 20, 20 40, 40 40, 30.1 10.1)) would
+be queried as <a class="reference external" href="http://bit.ly/1BzNwDq">http://bit.ly/1BzNwDq</a></p></li>
 <li><p><strong>nodeid</strong> – [Fixnum] Node UUID.</p></li>
 <li><p><strong>startdate</strong> – [String] Start date YYYY-MM-DD</p></li>
 <li><p><strong>enddate</strong> – [String] End date YYYY-MM-DD</p></li>
-<li><p><strong>startdepth</strong> – [Fixnum] Start depth</p></li>
-<li><p><strong>enddepth</strong> – [Boolean] End depth</p></li>
-<li><p><strong>flags</strong> – [String] Comma separated list of quality flags which need to be set</p></li>
+<li><p><strong>startdepth</strong> – [Fixnum] Start depth, in meters. Depth below sea level are treated as
+positive numbers.</p></li>
+<li><p><strong>enddepth</strong> – [Fixnum] End depth, in meters. Depth below sea level are treated as
+positive numbers.</p></li>
+<li><p><strong>flags</strong> – [String] Comma separated list of quality flags which need
+to be set</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -117,15 +124,19 @@ or POLYGON. Example of a polygon: ((30.1 10.1, 20, 20 40, 40 40, 30.1 10.1)) wou
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>scientificname</strong> – [String] Scientific name. Leave empty to include all taxa.</p></li>
+<li><p><strong>scientificname</strong> – [String] Scientific name. Leave empty to include
+all taxa.</p></li>
 <li><p><strong>taxonid</strong> – [String] Taxon AphiaID.</p></li>
 <li><p><strong>nodeid</strong> – [String] Node UUID.</p></li>
 <li><p><strong>startdate</strong> – [String] Start date formatted as YYYY-MM-DD.</p></li>
 <li><p><strong>enddate</strong> – [String] End date formatted as YYYY-MM-DD.</p></li>
-<li><p><strong>startdepth</strong> – [Integer] Start depth, in meters.</p></li>
-<li><p><strong>enddepth</strong> – [Integer] End depth, in meters.</p></li>
+<li><p><strong>startdepth</strong> – [Fixnum] Start depth, in meters. Depth below sea level are treated as
+positive numbers.</p></li>
+<li><p><strong>enddepth</strong> – [Fixnum] End depth, in meters. Depth below sea level are treated as
+positive numbers.</p></li>
 <li><p><strong>geometry</strong> – [String] Geometry, formatted as WKT or GeoHash.</p></li>
-<li><p><strong>flags</strong> – [String] Comma separated list of quality flags which need to be set.</p></li>
+<li><p><strong>flags</strong> – [String] Comma separated list of quality flags which need
+to be set.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -146,15 +157,19 @@ or POLYGON. Example of a polygon: ((30.1 10.1, 20, 20 40, 40 40, 30.1 10.1)) wou
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>scientificname</strong> – [String] Scientific name. Leave empty to include all taxa.</p></li>
+<li><p><strong>scientificname</strong> – [String] Scientific name. Leave empty to include
+all taxa.</p></li>
 <li><p><strong>taxonid</strong> – [String] Taxon AphiaID.</p></li>
 <li><p><strong>nodeid</strong> – [String] Node UUID.</p></li>
 <li><p><strong>startdate</strong> – [String] Start date formatted as YYYY-MM-DD.</p></li>
 <li><p><strong>enddate</strong> – [String] End date formatted as YYYY-MM-DD.</p></li>
-<li><p><strong>startdepth</strong> – [Integer] Start depth, in meters.</p></li>
-<li><p><strong>enddepth</strong> – [Integer] End depth, in meters.</p></li>
+<li><p><strong>startdepth</strong> – [Fixnum] Start depth, in meters. Depth below sea level are treated as
+positive numbers.</p></li>
+<li><p><strong>enddepth</strong> – [Fixnum] End depth, in meters. Depth below sea level are treated as
+positive numbers.</p></li>
 <li><p><strong>geometry</strong> – [String] Geometry, formatted as WKT or GeoHash.</p></li>
-<li><p><strong>flags</strong> – [String] Comma separated list of quality flags which need to be set.</p></li>
+<li><p><strong>flags</strong> – [String] Comma separated list of quality flags which need to
+be set.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
