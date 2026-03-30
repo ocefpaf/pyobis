@@ -1,22 +1,20 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyobis.checklist.checklist &mdash; pyobis 0.1.1.dev464+gb162f59 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+  <title>pyobis.checklist.checklist &mdash; pyobis 0.1.1.dev641+g0cde7e983 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=60ba4e6d"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=33469599"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -33,9 +31,6 @@
           <a href="../../../index.html" class="icon icon-home">
             pyobis
           </a>
-              <div class="version">
-                0.1.1.dev464+gb162f59
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -82,14 +77,15 @@
 <span class="sd">/checklist/ API endpoints as documented on https://api.obis.org/.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">..obisutils</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..obisutils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">build_api_url</span><span class="p">,</span>
     <span class="n">handle_arrint</span><span class="p">,</span>
     <span class="n">handle_arrstr</span><span class="p">,</span>
+    <span class="n">logger</span><span class="p">,</span>
     <span class="n">obis_baseurl</span><span class="p">,</span>
     <span class="n">obis_GET</span><span class="p">,</span>
 <span class="p">)</span>
@@ -97,12 +93,12 @@
 
 <div class="viewcode-block" id="ChecklistResponse">
 <a class="viewcode-back" href="../../../checklist.html#pyobis.checklist.ChecklistResponse">[docs]</a>
-<span class="k">class</span> <span class="nc">ChecklistResponse</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ChecklistResponse</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An OBIS Checklist Response Object</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">paginate</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">paginate</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialise the object parameters</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -114,8 +110,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__url</span> <span class="o">=</span> <span class="n">url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__args</span> <span class="o">=</span> <span class="n">args</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__paginate</span> <span class="o">=</span> <span class="n">paginate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cache</span> <span class="o">=</span> <span class="n">cache</span>
 
-    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Execute or fetch the data based on the query</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -124,6 +121,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__url</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__args</span><span class="p">,</span>
                 <span class="s2">&quot;application/json; charset=utf-8&quot;</span><span class="p">,</span>
+                <span class="n">cache</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__cache</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__args</span><span class="p">[</span><span class="s2">&quot;skip&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">10</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__args</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5000</span>
@@ -137,17 +135,14 @@
                 <span class="k">pass</span>
 
             <span class="c1"># fetch first 10 records, and print number of estimated records</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated records: </span><span class="si">{</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated records: </span><span class="si">{</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;total&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                 <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">[</span><span class="si">{}{}</span><span class="s2">] </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="s2">&quot;Fetching: &quot;</span><span class="p">,</span>
                     <span class="s2">&quot;█&quot;</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">/</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]),</span>
                     <span class="s2">&quot;.&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">100</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">/</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">])),</span>
                     <span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]),</span>
                 <span class="p">),</span>
-                <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span>
-                <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="c1"># now paginate until the response is null</span>
             <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
@@ -155,13 +150,14 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">__url</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">__args</span><span class="p">,</span>
                     <span class="s2">&quot;application/json; charset=utf-8&quot;</span><span class="p">,</span>
+                    <span class="n">cache</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__cache</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="c1"># when we find that no records are there, we break out of loop</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="k">break</span>
                 <span class="n">out</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]</span>
                 <span class="c1"># print the progress bar</span>
-                <span class="nb">print</span><span class="p">(</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                     <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">[</span><span class="si">{}{}</span><span class="s2">] </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="s2">&quot;Fetching: &quot;</span><span class="p">,</span>
                         <span class="s2">&quot;█&quot;</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">/</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]),</span>
@@ -176,16 +172,17 @@
                 <span class="c1"># continue to fetch next 5000 records</span>
                 <span class="n">i</span> <span class="o">+=</span> <span class="mi">5000</span>
             <span class="c1"># print actual number of fetched records</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Fetched </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;results&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> records.&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Fetched </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;results&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> records.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">out</span> <span class="o">=</span> <span class="n">obis_GET</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__url</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__args</span><span class="p">,</span>
                 <span class="s2">&quot;application/json; charset=utf-8&quot;</span><span class="p">,</span>
+                <span class="n">cache</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__cache</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">out</span>
 
-    <span class="k">def</span> <span class="nf">to_pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert the results into a pandas DataFrame</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -195,7 +192,7 @@
 
 <div class="viewcode-block" id="list">
 <a class="viewcode-back" href="../../../checklist.html#pyobis.checklist.list">[docs]</a>
-<span class="k">def</span> <span class="nf">list</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
     <span class="n">scientificname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">taxonid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">nodeid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -205,6 +202,7 @@
     <span class="n">enddepth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">geometry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">flags</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -228,6 +226,7 @@
 <span class="sd">        positive numbers.</span>
 <span class="sd">    :param flags: [String] Comma separated list of quality flags which need</span>
 <span class="sd">        to be set</span>
+<span class="sd">    :param cache: [bool, optional] Whether to use caching. Defaults to True.</span>
 
 <span class="sd">    :return: A dictionary</span>
 
@@ -256,13 +255,13 @@
         <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="k">return</span> <span class="n">ChecklistResponse</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="p">{</span><span class="o">**</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">},</span> <span class="n">paginate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">ChecklistResponse</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="p">{</span><span class="o">**</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">},</span> <span class="n">paginate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="redlist">
 <a class="viewcode-back" href="../../../checklist.html#pyobis.checklist.redlist">[docs]</a>
-<span class="k">def</span> <span class="nf">redlist</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">redlist</span><span class="p">(</span>
     <span class="n">scientificname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">taxonid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">nodeid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -272,6 +271,7 @@
     <span class="n">enddepth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">geometry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">flags</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -290,6 +290,7 @@
 <span class="sd">    :param geometry: [String] Geometry, formatted as WKT or GeoHash.</span>
 <span class="sd">    :param flags: [String] Comma separated list of quality flags which need</span>
 <span class="sd">        to be set.</span>
+<span class="sd">    :param cache: [bool, optional] Whether to use caching. Defaults to True.</span>
 
 <span class="sd">    :return: A dictionary</span>
 
@@ -313,13 +314,13 @@
         <span class="s2">&quot;flags&quot;</span><span class="p">:</span> <span class="n">flags</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="k">return</span> <span class="n">ChecklistResponse</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="p">{</span><span class="o">**</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">},</span> <span class="n">paginate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">ChecklistResponse</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="p">{</span><span class="o">**</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">},</span> <span class="n">paginate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="newest">
 <a class="viewcode-back" href="../../../checklist.html#pyobis.checklist.newest">[docs]</a>
-<span class="k">def</span> <span class="nf">newest</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">newest</span><span class="p">(</span>
     <span class="n">scientificname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">taxonid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">nodeid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -329,6 +330,7 @@
     <span class="n">enddepth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">geometry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">flags</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -347,6 +349,7 @@
 <span class="sd">    :param geometry: [String] Geometry, formatted as WKT or GeoHash.</span>
 <span class="sd">    :param flags: [String] Comma separated list of quality flags which need to</span>
 <span class="sd">        be set.</span>
+<span class="sd">    :param cache: [bool, optional] Whether to use caching. Defaults to True.</span>
 
 <span class="sd">    :return: A dictionary</span>
 
@@ -370,7 +373,7 @@
         <span class="s2">&quot;flags&quot;</span><span class="p">:</span> <span class="n">flags</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="k">return</span> <span class="n">ChecklistResponse</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="p">{</span><span class="o">**</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">},</span> <span class="n">paginate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">ChecklistResponse</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="p">{</span><span class="o">**</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">},</span> <span class="n">paginate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">)</span></div>
 
 </pre></div>
 
